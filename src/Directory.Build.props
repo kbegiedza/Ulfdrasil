@@ -4,8 +4,39 @@
     <DefaultNetCoreTargetFramework>net10.0</DefaultNetCoreTargetFramework>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Applies to all projects under src by default -->
+    <Authors>Krzysztof Begiedza</Authors>
+    <Company>Ulfsoft</Company>
+    <Description>Ulfsoft Library</Description>
+    <Version>0.0.1</Version>
+    <VersionSuffix>prerelease</VersionSuffix>
+
+    <!-- License; pick the correct one for your project -->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+
+    <!-- Useful metadata -->
+    <RepositoryUrl>https://github.com/your-org/ulfdrasil</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/your-org/ulfdrasil</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- Generate XML docs by default and include in packages -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Optional: source link / symbols (if you want snupkg) -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Optional: turn this on if you want nuget packages on normal build -->
+    <!-- <GeneratePackageOnBuild>true</GeneratePackageOnBuild> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
 </Project>
