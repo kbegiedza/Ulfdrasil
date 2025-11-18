@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/examples/">
+    <File Path="examples\Directory.Build.props" />
+    <File Path="examples\Directory.Packages.props" />
+    <Project Path="examples/Exsaga.Console/Exsaga.Console.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Packages.props" />
+    <Project Path="src\Ulfdrasil.Configuration\Ulfdrasil.Configuration.csproj" />
+    <Project Path="src\Ulfdrasil.Web\Ulfdrasil.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+    <File Path="tests/Directory.Packages.props" />
+    <Project Path="tests/Ulfdrasil.Configuration.UnitTests/Ulfdrasil.Configuration.UnitTests.csproj" />
+    <Project Path="tests/Ulfdrasil.Web.UnitTests/Ulfdrasil.Web.UnitTests.csproj" />
+  </Folder>
+</Solution>

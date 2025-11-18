@@ -1,0 +1,10 @@
+<Project>
+  <Import Project="..\src\Directory.Build.props" />
+
+  <!-- used only in tests -->
+  <PropertyGroup>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+
+</Project>
