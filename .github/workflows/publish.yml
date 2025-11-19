@@ -1,6 +1,7 @@
 name: Publish NuGet packages
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -21,20 +22,20 @@ jobs:
           global-json-file: global.json
 
       - name: Install GitVersion
-        uses: GitTools/actions/gitversion/setup@v4
+        uses: gittools/actions/gitversion/setup@v4.2.0
         with:
           versionSpec: '6.x'
 
       - name: Determine version with GitVersion
         id: gitversion
-        uses: GitTools/actions/gitversion/execute@v4
+        uses: gittools/actions/gitversion/execute@v4.2.0
         with:
-          useConfigFile: true
+          updateProjectFiles: true
+          updateAssemblyInfo: true
 
       - name: Log computed version
         run: |
           echo "SemVer:           ${{ steps.gitversion.outputs.semVer }}"
-          echo "NuGetVersion:     ${{ steps.gitversion.outputs.nuGetVersion }}"
           echo "FullSemVer:       ${{ steps.gitversion.outputs.fullSemVer }}"
           echo "AssemblySemVer:   ${{ steps.gitversion.outputs.assemblySemVer }}"
           echo "InformationalVer: ${{ steps.gitversion.outputs.informationalVersion }}"
@@ -49,8 +50,8 @@ jobs:
         run: |
           VERSION="${{ steps.gitversion.outputs.nuGetVersion }}"
           echo "Packing with version: $VERSION"
-          dotnet pack src/Ulfdrasil.Web/Ulfdrasil.Web.csproj -c Release -o ./artifacts --no-build -p:Version=$VERSION -p:PackageVersion=$VERSION
-          dotnet pack src/Ulfdrasil.Configuration/Ulfdrasil.Configuration.csproj -c Release -o ./artifacts --no-build -p:Version=$VERSION -p:PackageVersion=$VERSION
+          dotnet pack src/Ulfdrasil.Web/Ulfdrasil.Web.csproj -c Release -o ./artifacts --no-build
+          dotnet pack src/Ulfdrasil.Configuration/Ulfdrasil.Configuration.csproj -c Release -o ./artifacts --no-build
 
       - name: Push packages to NuGet.org
         run: |
