@@ -7,6 +7,13 @@ on:
       - master
       - 'v*.*'
       - release/*
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
+      - 'README.md'
+      - '.editorconfig'
+      - 'GitVersion.yml'
+      - '.*'
   pull_request:
   merge_group:
   workflow_dispatch:
