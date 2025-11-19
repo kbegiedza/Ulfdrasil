@@ -1,20 +1,10 @@
 name: Build and Test
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - master
-      - 'v*.*'
-      - release/*
-    paths-ignore:
-      - 'docs/**'
-      - '.github/**'
-      - 'README.md'
-      - '.editorconfig'
-      - 'GitVersion.yml'
-      - '.*'
-  pull_request:
     paths-ignore:
       - 'docs/**'
       - '.github/**'
