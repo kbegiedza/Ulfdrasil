@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  pack-and-push:
+  build-and-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,11 +29,8 @@ jobs:
       - name: Restore
         run: dotnet restore Ulfdrasil.slnx
 
-      - name: Build
-        run: dotnet build Ulfdrasil.slnx --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test Ulfdrasil.slnx --no-build --logger trx --results-directory "TestResults"
+      - name: Build and Test
+        run: dotnet test Ulfdrasil.slnx --configuration Release --no-restore --logger trx --results-directory "TestResults"
 
       - name: Upload dotnet test results
         # Use always() to always run this step to publish test results when there are test failures
