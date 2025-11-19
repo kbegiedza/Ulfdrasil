@@ -31,7 +31,6 @@ jobs:
         uses: gittools/actions/gitversion/execute@v4.2.0
         with:
           updateProjectFiles: true
-          updateAssemblyInfo: true
 
       - name: Log computed version
         run: |
