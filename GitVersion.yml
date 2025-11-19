@@ -1,0 +1,16 @@
+mode: Mainline
+branches:
+  main:
+    regex: ^main$
+    tag: ''
+    increment: patch
+  master:
+    regex: ^master$
+    tag: ''
+    increment: patch
+
+tag-prefix: 'v'
+
+ignore:
+  sha: []
+
