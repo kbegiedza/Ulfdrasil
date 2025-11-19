@@ -32,13 +32,6 @@ jobs:
         with:
           updateProjectFiles: true
 
-      - name: Log computed version
-        run: |
-          echo "SemVer:           ${{ steps.gitversion.outputs.semVer }}"
-          echo "FullSemVer:       ${{ steps.gitversion.outputs.fullSemVer }}"
-          echo "AssemblySemVer:   ${{ steps.gitversion.outputs.assemblySemVer }}"
-          echo "InformationalVer: ${{ steps.gitversion.outputs.informationalVersion }}"
-
       - name: Restore
         run: dotnet restore Ulfdrasil.slnx
 
@@ -47,8 +40,6 @@ jobs:
 
       - name: Pack src projects
         run: |
-          VERSION="${{ steps.gitversion.outputs.nuGetVersion }}"
-          echo "Packing with version: $VERSION"
           dotnet pack src/Ulfdrasil.Web/Ulfdrasil.Web.csproj -c Release -o ./artifacts --no-build
           dotnet pack src/Ulfdrasil.Configuration/Ulfdrasil.Configuration.csproj -c Release -o ./artifacts --no-build
 
