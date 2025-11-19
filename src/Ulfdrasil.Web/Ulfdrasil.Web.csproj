@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
-    <RootNamespace>Ulfdrasil.Web</RootNamespace>
     <PackageId>Ulfdrasil.Web</PackageId>
+    <RootNamespace>Ulfdrasil.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
