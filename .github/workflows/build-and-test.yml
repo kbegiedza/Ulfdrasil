@@ -1,0 +1,41 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - 'v*.*'
+      - release/*
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+jobs:
+  build-and-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore Ulfdrasil.slnx
+
+      - name: Build and Test
+        run: dotnet test Ulfdrasil.slnx --configuration Release --no-restore --logger trx --results-directory "TestResults"
+
+      - name: Upload dotnet test results
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-results
+          path: TestResults

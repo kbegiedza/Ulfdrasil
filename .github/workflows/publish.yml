@@ -1,0 +1,58 @@
+name: Publish NuGet packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  pack-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Install GitVersion
+        uses: GitTools/actions/gitversion/setup@v4
+        with:
+          versionSpec: '6.x'
+
+      - name: Determine version with GitVersion
+        id: gitversion
+        uses: GitTools/actions/gitversion/execute@v4
+        with:
+          useConfigFile: true
+
+      - name: Log computed version
+        run: |
+          echo "SemVer:           ${{ steps.gitversion.outputs.semVer }}"
+          echo "NuGetVersion:     ${{ steps.gitversion.outputs.nuGetVersion }}"
+          echo "FullSemVer:       ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "AssemblySemVer:   ${{ steps.gitversion.outputs.assemblySemVer }}"
+          echo "InformationalVer: ${{ steps.gitversion.outputs.informationalVersion }}"
+
+      - name: Restore
+        run: dotnet restore Ulfdrasil.slnx
+
+      - name: Build
+        run: dotnet build Ulfdrasil.slnx --configuration Release --no-restore
+
+      - name: Pack src projects
+        run: |
+          VERSION="${{ steps.gitversion.outputs.nuGetVersion }}"
+          echo "Packing with version: $VERSION"
+          dotnet pack src/Ulfdrasil.Web/Ulfdrasil.Web.csproj -c Release -o ./artifacts --no-build -p:Version=$VERSION -p:PackageVersion=$VERSION
+          dotnet pack src/Ulfdrasil.Configuration/Ulfdrasil.Configuration.csproj -c Release -o ./artifacts --no-build -p:Version=$VERSION -p:PackageVersion=$VERSION
+
+      - name: Push packages to NuGet.org
+        run: |
+          dotnet nuget push "artifacts/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+          dotnet nuget push "artifacts/*.snupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
