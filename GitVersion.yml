@@ -2,15 +2,14 @@ mode: Mainline
 branches:
   main:
     regex: ^main$
-    tag: ''
-    increment: patch
+    increment: Patch
+    track-merge-target: true
   master:
     regex: ^master$
-    tag: ''
-    increment: patch
+    increment: Patch
+    track-merge-target: true
 
 tag-prefix: 'v'
 
 ignore:
   sha: []
-
