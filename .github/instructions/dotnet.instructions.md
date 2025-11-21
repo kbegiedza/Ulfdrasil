@@ -123,7 +123,32 @@ Do not hallucinate or make up code or details. If you are unsure about something
 - Public methods and classes should have **XML documentation comments** when they are part of a public API or library.
 - Names should be **clear, concise, and intention revealing**.
 - Avoid leaking internal implementation details via public interfaces.
+- Use **DTOs** for data transfer in APIs; avoid exposing domain entities directly.
+- Prefer to organize files into vertical slices (by feature/module) instead of horizontal layers.
 
+Example project structure:
+
+```text
+/src
+|-- /MyProject
+|   |-- /Modules
+|   |   |-- /FeatureA
+|   |   |   |-- /ValueObjects
+|   |   |   |-- /Entities
+|   |   |   |-- /Responses
+|   |   |   |-- /Requests
+|   |   |   |-- /Services
+|   |   |   |-- /Controllers
+|   |   |-- /FeatureB
+|   |       |-- /Domain
+|   |       |-- /Application
+|   |       |-- /Infrastructure
+|   |       |-- /Api
+|   |-- /Shared
+|   |   |-- /Domain
+/tests
+    |-- /MyProject.Tests
+```
 ---
 
 ## 8. Project Structure & Organization
