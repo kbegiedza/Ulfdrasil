@@ -5,18 +5,19 @@ namespace Ulfdrasil.UnitTests;
 
 public class ResultTests
 {
-    [Theory]
-    [InlineData(420)]
-    [InlineData(true)]
-    [InlineData("test text")]
-    public void Success_CreatesSuccessfulResult_WithValue(object value)
+    [Fact]
+    public void Success_CreatesSuccessfulResultGeneric_WithValue()
     {
+        // Arrange
+        const int expectedValue = 420;
+
         // Act
-        var result = Result.Success(value);
+        var result = Result.Success(expectedValue);
 
         // Assert
-        result.Value.Should().Be(value);
-        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().Be(expectedValue);
+        result.HasValue.Should().BeTrue();
+        result.Succeeded.Should().BeTrue();
         result.Error.Should().BeNull();
     }
 
@@ -27,7 +28,7 @@ public class ResultTests
         var result = Result.Success();
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.Succeeded.Should().BeTrue();
         result.Error.Should().BeNull();
     }
 
@@ -41,12 +42,12 @@ public class ResultTests
         var result = Result.Failure(error);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
+        result.Succeeded.Should().BeFalse();
         result.Error.Should().BeSameAs(error);
     }
 
     [Fact]
-    public void Failure_CreatesFailedResult_WithValueAndError()
+    public void Failure_CreatesFailedResultGeneric_WithError()
     {
         // Arrange
         var error = new Error(ErrorCode.Internal, "Something went wrong");
@@ -56,7 +57,8 @@ public class ResultTests
 
         // Assert
         result.Should().BeOfType<Result<int>>();
-        result.IsSuccess.Should().BeFalse();
+        result.HasValue.Should().BeFalse();
+        result.Succeeded.Should().BeFalse();
         result.Error.Should().BeSameAs(error);
     }
 }
