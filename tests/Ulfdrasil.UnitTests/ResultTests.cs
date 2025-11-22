@@ -5,16 +5,23 @@ namespace Ulfdrasil.UnitTests;
 
 public class ResultTests
 {
-    private class CustomResult : Result
+    [Theory]
+    [InlineData(420)]
+    [InlineData(true)]
+    [InlineData("test text")]
+    public void Success_CreatesSuccessfulResult_WithValue(object value)
     {
-        public CustomResult(bool isSuccess, Error? error)
-            : base(isSuccess, error)
-        {
-        }
+        // Act
+        var result = Result.Success(value);
+
+        // Assert
+        result.Value.Should().Be(value);
+        result.IsSuccess.Should().BeTrue();
+        result.Error.Should().BeNull();
     }
 
     [Fact]
-    public void Success_CreatesSuccessfulResult_WithNoError()
+    public void Success_CreatesSuccessfulResult_WithoutValue()
     {
         // Act
         var result = Result.Success();
@@ -25,7 +32,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Failure_CreatesFailedResult_WithProvidedError()
+    public void Failure_CreatesFailedResult_WithError()
     {
         // Arrange
         var error = new Error(ErrorCode.Internal, "Something went wrong");
@@ -39,30 +46,17 @@ public class ResultTests
     }
 
     [Fact]
-    public void BaseConstructor_ThrowsInvalidOperationException_WhenSuccessHasError()
+    public void Failure_CreatesFailedResult_WithValueAndError()
     {
         // Arrange
-        var error = new Error(ErrorCode.Internal, "Error message");
+        var error = new Error(ErrorCode.Internal, "Something went wrong");
 
-        // Act & Assert
-        Action act = () => _ = new CustomResult(true, error);
+        // Act
+        var result = Result.Failure<int>(error);
 
-        act.Should()
-           .Throw<InvalidOperationException>()
-           .WithMessage("A successful result cannot have an error message.");
-    }
-
-    [Fact]
-    public void BaseConstructor_ThrowsInvalidOperationException_WhenFailureWithoutError()
-    {
-        // Arrange
-        var error = new Error(ErrorCode.Internal, "Error message");
-
-        // Act & Assert
-        Action act = () => _ = new CustomResult(false, null);
-
-        act.Should()
-           .Throw<InvalidOperationException>()
-           .WithMessage("A failed result must have an error message.");
+        // Assert
+        result.Should().BeOfType<Result<int>>();
+        result.IsSuccess.Should().BeFalse();
+        result.Error.Should().BeSameAs(error);
     }
 }
