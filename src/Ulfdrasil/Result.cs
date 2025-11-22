@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ulfdrasil;
 
 /// <summary>
@@ -8,7 +10,7 @@ public class Result
     /// <summary>
     /// Indicates whether the operation was successful.
     /// </summary>
-    public bool IsSuccess { get; }
+    public bool Succeeded { get; }
 
     /// <summary>
     /// Error message in case of failure; null if the operation was successful.
@@ -25,7 +27,7 @@ public class Result
     protected Result(Error? error = null)
     {
         Error = error;
-        IsSuccess = error == null;
+        Succeeded = error == null;
     }
 
     /// <summary>
@@ -53,7 +55,7 @@ public class Result
     /// </summary>
     /// <param name="error">The error describing why the operation failed.</param>
     /// <returns>A failed result instance containing the provided error.</returns>
-    public static Result<TValue> Failure<TValue>(Error error) => new Result<TValue>(default, error);
+    public static Result<TValue> Failure<TValue>(Error error) => new Result<TValue>(error);
 
 }
 
@@ -66,19 +68,33 @@ public class Result<TValue> : Result
     /// <summary>
     /// Gets the value produced by a successful operation.
     /// </summary>
+    [MemberNotNullWhen(true, nameof(HasValue))]
     public TValue? Value { get; }
+
+    internal bool HasValue => Error == null;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TValue}"/> class.
     /// </summary>
     /// <param name="value">The value produced by the operation, if successful.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when a successful result is created with a non-null error or when a failed result is created without an error.
+    /// </exception>
+    internal Result(TValue value)
+    {
+        Value = value;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result{TValue}"/> class.
+    /// </summary>
     /// <param name="error">The error associated with a failed operation; should be <c>null</c> for successful operations.</param>
     /// <exception cref="InvalidOperationException">
     /// Thrown when a successful result is created with a non-null error or when a failed result is created without an error.
     /// </exception>
-    internal Result(TValue? value, Error? error = null)
+    internal Result(Error error)
         : base(error)
     {
-        Value = value;
+        Value = default;
     }
 }
