@@ -16,12 +16,11 @@ public class ResultTests
 
         // Assert
         result.Value.Should().Be(expectedValue);
-        result.HasValue.Should().BeTrue();
 
         result.IsSuccess.Should().BeTrue();
         result.IsFailure.Should().BeFalse();
 
-        result.FailureReason.Should().BeNull();
+        result.Problem.Should().BeNull();
     }
 
     [Fact]
@@ -33,14 +32,14 @@ public class ResultTests
         // Assert
         result.IsSuccess.Should().BeTrue();
 
-        result.FailureReason.Should().BeNull();
+        result.Problem.Should().BeNull();
     }
 
     [Fact]
     public void Failure_CreatesFailedResult_WithError()
     {
         // Arrange
-        var error = new FailureReason("error", "Something went wrong");
+        var error = new Problem("error", "Something went wrong");
 
         // Act
         var result = Result.Failure(error);
@@ -49,14 +48,14 @@ public class ResultTests
         result.IsSuccess.Should().BeFalse();
         result.IsFailure.Should().BeTrue();
 
-        result.FailureReason.Should().BeSameAs(error);
+        result.Problem.Should().BeSameAs(error);
     }
 
     [Fact]
     public void Failure_CreatesFailedResultGeneric_WithError()
     {
         // Arrange
-        var error = new FailureReason("error", "Something went wrong");
+        var error = new Problem("error", "Something went wrong");
 
         // Act
         var result = Result.Failure<int>(error);
@@ -64,12 +63,11 @@ public class ResultTests
         // Assert
         result.Should().BeOfType<Result<int>>();
 
-        result.HasValue.Should().BeFalse();
         result.Value.Should().Be(default);
 
         result.IsSuccess.Should().BeFalse();
         result.IsFailure.Should().BeTrue();
 
-        result.FailureReason.Should().BeSameAs(error);
+        result.Problem.Should().BeSameAs(error);
     }
 }

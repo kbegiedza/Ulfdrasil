@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Ulfdrasil.UnitTests;
 
-public class FailureReasonTests
+public class ProblemTests
 {
     [Fact]
     public void Constructor_WithCodeAndMessage_SetsProperties()
@@ -13,7 +13,7 @@ public class FailureReasonTests
         const string message = "Something went wrong";
 
         // Act
-        var error = new FailureReason(code, message);
+        var error = new Problem(code, message);
 
         // Assert
         error.Code.Should().Be(code);
@@ -28,14 +28,14 @@ public class FailureReasonTests
         const string code = "error_code";
         const string message = "Validation failed";
 
-        var details = new Dictionary<string, string[]>
+        var details = new Dictionary<string, string>
         {
-            ["Name"] = ["Name is required"],
-            ["Age"] = ["Age must be positive"]
+            ["Name"] = "Name is required",
+            ["Age"] = "Age must be positive"
         };
 
         // Act
-        var error = new FailureReason(code, message, details);
+        var error = new Problem(code, message, details);
 
         // Assert
         error.Code.Should().Be(code);
@@ -50,13 +50,13 @@ public class FailureReasonTests
         const string code = "error1";
         const string message = "Message";
 
-        var details = new Dictionary<string, string[]>
+        var details = new Dictionary<string, string>
         {
-            ["Field"] = ["Error", "Another error"]
+            ["Field"] = "Error"
         };
 
-        var first = new FailureReason(code, message, details);
-        var second = new FailureReason(code, message, details);
+        var first = new Problem(code, message, details);
+        var second = new Problem(code, message, details);
 
         // Assert
         first.Should().Be(second);
