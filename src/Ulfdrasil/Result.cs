@@ -10,24 +10,29 @@ public class Result
     /// <summary>
     /// Indicates whether the operation was successful.
     /// </summary>
-    public bool Succeeded { get; }
+    public bool IsSuccess { get; }
+
+    /// <summary>
+    /// Indicates whether the operation failed.
+    /// </summary>
+    public bool IsFailure => !IsSuccess;
 
     /// <summary>
     /// Error message in case of failure; null if the operation was successful.
     /// </summary>
-    public Error? Error { get; }
+    public FailureReason? FailureReason { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> class.
     /// </summary>`
-    /// <param name="error">The error associated with a failed operation; should be <c>null</c> for successful operations.</param>
+    /// <param name="failureReason">The error associated with a failed operation; should be <c>null</c> for successful operations.</param>
     /// <exception cref="InvalidOperationException">
     /// Thrown when a successful result is created with a non-null error or when a failed result is created without an error.
     /// </exception>
-    protected Result(Error? error = null)
+    protected Result(FailureReason? failureReason = null)
     {
-        Error = error;
-        Succeeded = error == null;
+        FailureReason = failureReason;
+        IsSuccess = failureReason == null;
     }
 
     /// <summary>
@@ -46,17 +51,16 @@ public class Result
     /// <summary>
     /// Creates a failed result with the specified error message.
     /// </summary>
-    /// <param name="error">The error describing why the operation failed.</param>
+    /// <param name="failureReason">The error describing why the operation failed.</param>
     /// <returns>A failed result instance containing the provided error.</returns>
-    public static Result Failure(Error error) => new Result(error);
+    public static Result Failure(FailureReason failureReason) => new Result(failureReason);
 
     /// <summary>
     /// Creates a failed result with the specified error message.
     /// </summary>
-    /// <param name="error">The error describing why the operation failed.</param>
+    /// <param name="failureReason">The error describing why the operation failed.</param>
     /// <returns>A failed result instance containing the provided error.</returns>
-    public static Result<TValue> Failure<TValue>(Error error) => new Result<TValue>(error);
-
+    public static Result<TValue> Failure<TValue>(FailureReason failureReason) => new Result<TValue>(failureReason);
 }
 
 /// <summary>
@@ -68,10 +72,11 @@ public class Result<TValue> : Result
     /// <summary>
     /// Gets the value produced by a successful operation.
     /// </summary>
+    [MaybeNull]
     [MemberNotNullWhen(true, nameof(HasValue))]
     public TValue? Value { get; }
 
-    internal bool HasValue => Error == null;
+    internal bool HasValue => FailureReason == null;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TValue}"/> class.
@@ -88,13 +93,14 @@ public class Result<TValue> : Result
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TValue}"/> class.
     /// </summary>
-    /// <param name="error">The error associated with a failed operation; should be <c>null</c> for successful operations.</param>
+    /// <param name="failureReason">The error associated with a failed operation; should be <c>null</c> for successful operations.</param>
     /// <exception cref="InvalidOperationException">
     /// Thrown when a successful result is created with a non-null error or when a failed result is created without an error.
     /// </exception>
-    internal Result(Error error)
-        : base(error)
+    internal Result(FailureReason failureReason)
+        : base(failureReason)
     {
+        // is it safe to set default for non-nullable types?
         Value = default;
     }
 }

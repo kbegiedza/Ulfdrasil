@@ -3,21 +3,21 @@ using Xunit;
 
 namespace Ulfdrasil.UnitTests;
 
-public class ErrorTests
+public class FailureReasonTests
 {
     [Fact]
     public void Constructor_WithCodeAndMessage_SetsProperties()
     {
         // Arrange
-        const ErrorCode code = ErrorCode.Internal;
+        const string code = "error_code";
         const string message = "Something went wrong";
 
         // Act
-        var error = new Error(code, message);
+        var error = new FailureReason(code, message);
 
         // Assert
         error.Code.Should().Be(code);
-        error.Message.Should().Be(message);
+        error.Description.Should().Be(message);
         error.Details.Should().BeNull();
     }
 
@@ -25,7 +25,7 @@ public class ErrorTests
     public void Constructor_WithDetails_SetsAllProperties()
     {
         // Arrange
-        const ErrorCode code = ErrorCode.Validation;
+        const string code = "error_code";
         const string message = "Validation failed";
 
         var details = new Dictionary<string, string[]>
@@ -35,11 +35,11 @@ public class ErrorTests
         };
 
         // Act
-        var error = new Error(code, message, details);
+        var error = new FailureReason(code, message, details);
 
         // Assert
         error.Code.Should().Be(code);
-        error.Message.Should().Be(message);
+        error.Description.Should().Be(message);
         error.Details.Should().BeSameAs(details);
     }
 
@@ -47,13 +47,16 @@ public class ErrorTests
     public void Error_IsRecord_ProvidesValueEquality()
     {
         // Arrange
+        const string code = "error1";
+        const string message = "Message";
+
         var details = new Dictionary<string, string[]>
         {
             ["Field"] = ["Error", "Another error"]
         };
 
-        var first = new Error(ErrorCode.Internal, "Message", details);
-        var second = new Error(ErrorCode.Internal, "Message", details);
+        var first = new FailureReason(code, message, details);
+        var second = new FailureReason(code, message, details);
 
         // Assert
         first.Should().Be(second);
