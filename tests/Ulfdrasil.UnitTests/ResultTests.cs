@@ -17,7 +17,10 @@ public class ResultTests
         // Assert
         result.Value.Should().Be(expectedValue);
         result.HasValue.Should().BeTrue();
-        result.Succeeded.Should().BeTrue();
+
+        result.IsSuccess.Should().BeTrue();
+        result.IsFailure.Should().BeFalse();
+
         result.FailureReason.Should().BeNull();
     }
 
@@ -28,7 +31,8 @@ public class ResultTests
         var result = Result.Success();
 
         // Assert
-        result.Succeeded.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
+
         result.FailureReason.Should().BeNull();
     }
 
@@ -42,7 +46,9 @@ public class ResultTests
         var result = Result.Failure(error);
 
         // Assert
-        result.Succeeded.Should().BeFalse();
+        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
+
         result.FailureReason.Should().BeSameAs(error);
     }
 
@@ -57,8 +63,13 @@ public class ResultTests
 
         // Assert
         result.Should().BeOfType<Result<int>>();
+
         result.HasValue.Should().BeFalse();
-        result.Succeeded.Should().BeFalse();
+        result.Value.Should().Be(default);
+
+        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
+
         result.FailureReason.Should().BeSameAs(error);
     }
 }

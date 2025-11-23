@@ -10,7 +10,12 @@ public class Result
     /// <summary>
     /// Indicates whether the operation was successful.
     /// </summary>
-    public bool Succeeded { get; }
+    public bool IsSuccess { get; }
+
+    /// <summary>
+    /// Indicates whether the operation failed.
+    /// </summary>
+    public bool IsFailure => !IsSuccess;
 
     /// <summary>
     /// Error message in case of failure; null if the operation was successful.
@@ -27,7 +32,7 @@ public class Result
     protected Result(FailureReason? failureReason = null)
     {
         FailureReason = failureReason;
-        Succeeded = failureReason == null;
+        IsSuccess = failureReason == null;
     }
 
     /// <summary>
@@ -56,7 +61,6 @@ public class Result
     /// <param name="failureReason">The error describing why the operation failed.</param>
     /// <returns>A failed result instance containing the provided error.</returns>
     public static Result<TValue> Failure<TValue>(FailureReason failureReason) => new Result<TValue>(failureReason);
-
 }
 
 /// <summary>
@@ -68,6 +72,7 @@ public class Result<TValue> : Result
     /// <summary>
     /// Gets the value produced by a successful operation.
     /// </summary>
+    [MaybeNull]
     [MemberNotNullWhen(true, nameof(HasValue))]
     public TValue? Value { get; }
 
@@ -95,6 +100,7 @@ public class Result<TValue> : Result
     internal Result(FailureReason failureReason)
         : base(failureReason)
     {
+        // is it safe to set default for non-nullable types?
         Value = default;
     }
 }
