@@ -7,6 +7,7 @@
   <Folder Name="/src/">
     <File Path="src/Directory.Build.props" />
     <File Path="src/Directory.Packages.props" />
+    <Project Path="src/Ulfdrasil.Hyperbatch/Ulfdrasil.Hyperbatch.csproj" />
     <Project Path="src/Ulfdrasil/Ulfdrasil.csproj" />
     <Project Path="src\Ulfdrasil.Configuration\Ulfdrasil.Configuration.csproj" />
     <Project Path="src\Ulfdrasil.Web\Ulfdrasil.Web.csproj" />
@@ -15,6 +16,7 @@
     <File Path="tests/Directory.Build.props" />
     <File Path="tests/Directory.Packages.props" />
     <Project Path="tests/Ulfdrasil.Configuration.UnitTests/Ulfdrasil.Configuration.UnitTests.csproj" />
+    <Project Path="tests/Ulfdrasil.Hyperbatch.UnitTests/Ulfdrasil.Hyperbatch.UnitTests.csproj" />
     <Project Path="tests/Ulfdrasil.Web.UnitTests/Ulfdrasil.Web.UnitTests.csproj" />
     <Project Path="tests\Ulfdrasil.UnitTests\Ulfdrasil.UnitTests.csproj" />
   </Folder>
