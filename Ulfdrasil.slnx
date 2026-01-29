@@ -3,6 +3,7 @@
     <File Path="examples\Directory.Build.props" />
     <File Path="examples\Directory.Packages.props" />
     <Project Path="examples/Exsaga.Console/Exsaga.Console.csproj" />
+    <Project Path="examples/Exsaga.Hyperbatching/Exsaga.Hyperbatching.csproj" />
   </Folder>
   <Folder Name="/src/">
     <File Path="src/Directory.Build.props" />
