@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.Http.Json;
-
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -36,7 +35,7 @@ public sealed class EmbeddingsLoadDaemon : BackgroundService
         var inputs = ResolveInputs(settings);
 
         var baseUri = CreateBaseUri(settings.BaseUrl);
-        var endpointUri = CreateEndpointUri(settings.Endpoint, baseUri);
+        var endpointUri = new Uri(baseUri, settings.Endpoint);
 
         using var httpClient = new HttpClient
         {
@@ -266,7 +265,7 @@ public sealed class EmbeddingsLoadDaemon : BackgroundService
 
     private static void EnsureSupportedScheme(Uri uri, string settingName, string rawValue)
     {
-        if (uri.Scheme is not (Uri.UriSchemeHttp or Uri.UriSchemeHttps))
+        if (uri.Scheme is not ("http" or "https"))
         {
             throw new InvalidOperationException(
                 $"{settingName} must use http or https, but was '{rawValue}'.");
@@ -295,7 +294,7 @@ public sealed class EmbeddingsLoadDaemon : BackgroundService
 
         return new EmbeddingRequest
         {
-            Input = input,
+            Input = [input],
             Model = settings.Model,
             Tenant = settings.Tenant,
             Dimensions = settings.Dimensions

@@ -55,11 +55,11 @@ app.MapPost(
         TimeProvider timeProvider,
         CancellationToken cancellationToken) =>
     {
-        if (string.IsNullOrWhiteSpace(request.Input))
+        if (request.Input.Length == 0 || request.Input.All(string.IsNullOrWhiteSpace))
         {
             return Results.Problem(
                 title: "validation_error",
-                detail: "Input is required.",
+                detail: "Input is required and cannot be empty.",
                 statusCode: StatusCodes.Status400BadRequest);
         }
 

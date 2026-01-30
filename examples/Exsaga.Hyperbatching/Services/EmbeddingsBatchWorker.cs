@@ -39,7 +39,7 @@ public sealed class EmbeddingsBatchWorker : IHyperbatchBatchHandler<BatchKey, Em
             return Array.Empty<Result<EmbeddingResponse>>();
         }
 
-        if (requests.Any(request => request.Request.Input.Equals("RATE_LIMIT", StringComparison.OrdinalIgnoreCase)))
+        if (requests.Any(request => request.Request.Input.Any(i => i.Equals("RATE_LIMIT", StringComparison.OrdinalIgnoreCase))))
         {
             throw new HyperbatchBatchException(
                 HyperbatchBatchFailure.Transient(
@@ -47,7 +47,7 @@ public sealed class EmbeddingsBatchWorker : IHyperbatchBatchHandler<BatchKey, Em
         }
 
         if (requests.Count > 1
-            && requests.Any(request => request.Request.Input.Equals("INVALID", StringComparison.OrdinalIgnoreCase)))
+            && requests.Any(request => request.Request.Input.Any(i => i.Equals("INVALID", StringComparison.OrdinalIgnoreCase))))
         {
             throw new HyperbatchBatchException(
                 HyperbatchBatchFailure.Client(
@@ -69,11 +69,11 @@ public sealed class EmbeddingsBatchWorker : IHyperbatchBatchHandler<BatchKey, Em
     private Result<EmbeddingResponse> CreateResult(HyperbatchRequest<EmbeddingRequest> request)
     {
         var input = request.Request.Input;
-        if (string.IsNullOrWhiteSpace(input)
-            || input.Equals("INVALID", StringComparison.OrdinalIgnoreCase))
+        if (input == null || input.Length == 0 || input.All(string.IsNullOrWhiteSpace)
+            || input.Any(i => i.Equals("INVALID", StringComparison.OrdinalIgnoreCase)))
         {
             return Result.Failure<EmbeddingResponse>(
-                HyperbatchProblems.ValidationFailed("Input must be non-empty."));
+                HyperbatchProblems.ValidationFailed("Input must be non-empty and valid."));
         }
 
         var model = request.Request.Model;

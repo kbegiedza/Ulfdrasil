@@ -6,7 +6,7 @@
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       },
-      "commandLineArgs": "--base-url https://localhost:5001 --endpoint /embeddings"
+      "commandLineArgs": "--base-url http://localhost:5000 --endpoint /embeddings"
     }
   }
 }

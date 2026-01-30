@@ -6,9 +6,9 @@ namespace Exsaga.Hyperbatching.Models;
 public sealed record EmbeddingRequest
 {
     /// <summary>
-    /// Gets the input text to embed.
+    /// Gets the input text(s) to embed.
     /// </summary>
-    public required string Input { get; init; }
+    public required string[] Input { get; init; }
 
     /// <summary>
     /// Gets the model name.
